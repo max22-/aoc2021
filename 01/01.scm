@@ -1,8 +1,10 @@
-(define (read-number port)
-  (let ((l (read-line port)))
+(define (read-numbers)
+  (let ((l (read-line)))
     (if (eof-object? l)
 	'()
-	(cons (string->number l) (read-number port)))))
+	(cons (string->number l) (read-numbers)))))
+
+(define numbers (read-numbers))
 
 (define (zip a b)
   (if (or (null? a) (null? b))
@@ -18,8 +20,7 @@
 	      (zip input (cdr input)))))
 
 (display "Solution 1: ")
-(display
- (solution1 (call-with-input-file "input.txt" read-number)))
+(display (solution1 numbers))
 (newline)
 
 (define (zipWith3 f a b c)
@@ -28,8 +29,6 @@
       (cons (f (car a) (car b) (car c))
 	    (zipWith3 f (cdr a) (cdr b) (cdr c)))))
 
-(define example (call-with-input-file "example.txt" read-number))
-
 (define (apply-window input)
   (zipWith3 + input (cdr input) (cddr input)))
 
@@ -37,5 +36,5 @@
   (solution1 (apply-window input)))
 
 (display "Solution2: ")
-(display (solution2 (call-with-input-file "input.txt" read-number)))
+(display (solution2 numbers))
 (newline)
