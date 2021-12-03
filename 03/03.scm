@@ -1,0 +1,67 @@
+(define (read-input)
+  (let ((l (read-line)))
+    (if (eof-object? l)
+	'()
+	(cons (parse l) (read-input)))))
+
+(define (parse l)
+  (map
+   (lambda (c)
+     (cond ((char=? c #\0) 0)
+	   ((char=? c #\1) 1)
+	   (else (begin (error "Invalid input") (quit)))))
+   (string->list l)))
+
+(define input (read-input))
+
+(define (zipWith f a b)
+  (if (or (null? a) (null? b))
+      '()
+      (cons (f (car a) (car b))
+	    (zipWith f (cdr a) (cdr b)))))
+
+(define (decode base x)
+  (fold-left (lambda (a b) (+ (* base a) b)) 0 x))
+
+(define (gamma acc)
+  (decode 2
+	  (map (lambda (x) (if (< 0 x) 1 0)) acc)))
+
+(define (epsilon acc)
+  (decode 2
+	  (map (lambda (x) (if (> 0 x) 1 0)) acc)))
+
+(define (repeat n x)
+  (if (> n 0)
+      (cons x (repeat (- n 1) x))
+      '()))
+
+(define accumulator
+  (fold-left
+   (lambda (a b)
+     (begin
+       ;(format #t "a: ~A" a)
+       ;(newline)
+       ;(format #t "b: ~A" b)
+       ;(newline)
+       (zipWith +
+		(map (lambda (x) (- (* 2 x) 1)) b)
+		a)))
+   (repeat (length (car input)) 0)
+   input))
+
+(display "Accumulator: ")
+(display accumulator)
+(newline)
+
+(display "Gamma: ")
+(display (gamma accumulator))
+(newline)
+
+(display "Espilon: ")
+(display (epsilon accumulator))
+(newline)
+
+(display "Solution: ")
+(display (* (gamma accumulator) (epsilon accumulator)))
+(newline)
