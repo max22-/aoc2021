@@ -62,6 +62,38 @@
 (display (epsilon accumulator))
 (newline)
 
-(display "Solution: ")
+(display "Solution 1: ")
 (display (* (gamma accumulator) (epsilon accumulator)))
 (newline)
+
+(define (accumulate l column)
+  (apply +
+	 (map
+	  (lambda (x)
+	    (- (* 2 (list-ref x column)) 1))
+	  l)))
+
+(define (keep p column l)
+  (begin
+    ;(format #t "(keep p ~A ~A)\n" column l)
+    (cond ((<= (length l) 1) l)
+	  ((>= column (length (car l))) l)
+	  (else  
+	   (let* ((acc (accumulate l column))
+		  (bit (if (p acc) 1 0)))
+	     (keep p
+		   (+ column 1)
+		   (filter (lambda (x) (= bit (list-ref x column))) l)))))))
+
+
+(define oxygen
+  (decode 2 (car (keep (lambda (acc) (>= acc 0)) 0 input))))
+
+(define CO2
+  (decode 2 (car (keep (lambda (acc) (< acc 0)) 0 input))))
+
+
+(format #t "Oxygen: ~A\n" oxygen)
+(format #t "CO2: ~A\n" CO2)
+(format #t "Solution 2: ~A\n" (* oxygen CO2))
+
