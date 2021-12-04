@@ -90,6 +90,8 @@ int main()
   unsigned int acnt = 0, x, y, i, j, k, l, m, score;
   char c;
 
+  unsigned int winners[1000] = {0}, winners_count, loser;
+
   
   a[acnt] = hptr;
   hptr+=2;
@@ -154,18 +156,35 @@ int main()
 	  }
 	}
       }
+      
       if(check(a[j]))
-	goto win;
-    }
-    /*for(m =0; m < acnt; m++)
-      display(a[m]);*/
-    /* sleep(1); */
-  }
+	winners[j] = 1;
 
-  fprintf(stderr, "Nobody wins :(");
+      winners_count = 0;
+      for(m = 1; m < acnt; m++)
+	if(winners[m])
+	  winners_count++;
+      if(winners_count == acnt - 1)
+	goto lose;
+      if(check(a[j]))
+	winners[j] = 1;
+    }
+    
+  }
+  
+  /*for(m =0; m < acnt; m++)
+    display(a[m]);
+    sleep(1);*/
+  
+
+  fprintf(stderr, "No single solution :(");
   exit(1);
- win:
-  printf("board %u wins after %u turns. Last number : %u\n", j, i, at(a[0], i, 0));
+ lose:
+
+  for(loser = 1; loser < acnt; loser++)
+    if(!winners[loser])
+      break;
+  printf("board %d loses after %u turns. Last number : %u\n", loser, i, at(a[0], i, 0));
   display(a[j]);
 
   score = 0;
