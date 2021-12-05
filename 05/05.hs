@@ -22,7 +22,8 @@ linesp = many linep
 expand :: Line -> [Point]
 expand ((x1, y1), (x2, y2)) | x1 == x2 = [(x1, y) | y <- [(min y1 y2) .. (max y1 y2)]]
 expand ((x1, y1), (x2, y2)) | y1 == y2 = [(x, y1) | x <- [(min x1 x2) .. (max x1 x2)]]
-expand l = []
+expand ((x1, y1), (x2, y2)) | (abs (x2 - x1) == abs (y2 - y1)) = [(x1 + signum(x2-x1)*i, y1 + signum(y2-y1) * i) | i <- [0..abs(x2-x1)]]
+expand _ = error "Invalid input"
 
 
 solution = length . filter (\(p, c) -> c >= 2) . map (\l -> (head l, length l)) . group .sort . concatMap expand
