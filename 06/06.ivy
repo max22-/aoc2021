@@ -1,0 +1,2 @@
+op b x = 0 == 1 - x
+op next x = -1+((1 - b x) sel x), ((+/ b x) rho 6), ((+/ b x) rho 8)
