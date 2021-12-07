@@ -5,7 +5,7 @@ sepBy :: Parser a -> Parser b -> Parser [a]
 sepBy p sep = liftM2 (:) p (many (sep >> p))
 
 cost ::  [Int] -> Int -> Int
-cost v x = sum . map (abs . (x -)) $ v
+cost v x = sum . map (abs . (\y -> sum [1..abs(x-y)])) $ v
 
 --input :: [Int]
 --input = [16,1,2,0,4,2,7,1,2,14]
