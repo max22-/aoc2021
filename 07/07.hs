@@ -7,9 +7,6 @@ sepBy p sep = liftM2 (:) p (many (sep >> p))
 cost ::  [Int] -> Int -> Int
 cost v x = sum . map (abs . (\y -> sum [1..abs(x-y)])) $ v
 
---input :: [Int]
---input = [16,1,2,0,4,2,7,1,2,14]
-
 range :: [Int] -> [Int]
 range xs = [foldr min (head xs) xs .. foldr max (head xs) xs]
 
